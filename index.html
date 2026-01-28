@@ -10,6 +10,17 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --secondary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -19,12 +30,67 @@
         }
 
         body {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: var(--primary-gradient);
             min-height: 100vh;
             color: #333;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            position: relative;
+        }
+
+        /* خلفية متحركة */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            animation: float 20s infinite linear;
+        }
+
+        .bg-circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+            animation-duration: 25s;
+        }
+
+        .bg-circle:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 5s;
+            animation-duration: 20s;
+            animation-direction: reverse;
+        }
+
+        .bg-circle:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 10s;
+            animation-duration: 15s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, 20px) rotate(90deg); }
+            50% { transform: translate(0, 40px) rotate(180deg); }
+            75% { transform: translate(-20px, 20px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
         }
 
         .app-container {
@@ -32,6 +98,8 @@
             margin: 0 auto;
             padding: 10px;
             animation: fadeIn 0.8s ease;
+            position: relative;
+            z-index: 1;
         }
 
         @keyframes fadeIn {
@@ -45,7 +113,7 @@
             top: 10px;
             left: 10px;
             z-index: 1000;
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            background: var(--secondary-gradient);
             color: white;
             border: none;
             border-radius: 50px;
@@ -60,7 +128,7 @@
             gap: 5px;
             animation: pulse 2s infinite;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--glass-border);
             touch-action: manipulation;
         }
 
@@ -84,16 +152,18 @@
         }
 
         .header {
-            background: linear-gradient(to right, #1e3c72, #2a5298);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
             color: white;
             padding: 15px;
-            border-radius: 15px;
+            border-radius: 20px;
             margin-bottom: 15px;
             text-align: center;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--glass-shadow);
             position: relative;
             overflow: hidden;
             animation: slideInDown 0.8s ease;
+            border: 1px solid var(--glass-border);
         }
 
         @keyframes slideInDown {
@@ -108,7 +178,7 @@
             right: 0;
             width: 100%;
             height: 4px;
-            background: linear-gradient(to right, #3b82f6, #1d4ed8);
+            background: var(--secondary-gradient);
         }
 
         .university-title {
@@ -118,6 +188,7 @@
             position: relative;
             z-index: 1;
             line-height: 1.3;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .college-title {
@@ -140,13 +211,14 @@
         }
 
         .form-container {
-            background-color: white;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
             padding: 15px;
-            border-radius: 15px;
+            border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
             position: relative;
-            border: 1px solid #f1f5f9;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             animation: slideInUp 0.8s ease 0.2s both;
         }
 
@@ -157,8 +229,8 @@
             right: 0;
             width: 100%;
             height: 4px;
-            background: linear-gradient(to right, #3b82f6, #1d4ed8);
-            border-radius: 15px 15px 0 0;
+            background: var(--secondary-gradient);
+            border-radius: 20px 20px 0 0;
         }
 
         .section-title {
@@ -182,7 +254,7 @@
             right: 0;
             width: 80px;
             height: 2px;
-            background: linear-gradient(to right, #3b82f6, #1d4ed8);
+            background: var(--secondary-gradient);
             border-radius: 1px;
         }
 
@@ -257,7 +329,7 @@
             cursor: pointer;
             background-color: white;
             border-bottom: 1px solid #e2e8f0;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
             -webkit-tap-highlight-color: rgba(59, 130, 246, 0.1);
             min-height: 60px;
         }
@@ -289,6 +361,11 @@
         .team-card.fourth-year .team-header.active {
             background-color: rgba(255, 241, 242, 0.9);
             border-bottom-color: #ef4444;
+        }
+        
+        .team-card.fifth-year .team-header.active {
+            background-color: rgba(245, 243, 255, 0.9);
+            border-bottom-color: #8b5cf6;
         }
 
         .team-title {
@@ -330,6 +407,10 @@
         
         .fourth-year .team-badge {
             background-color: #ef4444;
+        }
+        
+        .fifth-year .team-badge {
+            background-color: #8b5cf6;
         }
 
         .team-toggle {
@@ -400,6 +481,10 @@
         
         .fourth-year .course-item:before {
             background-color: #ef4444;
+        }
+        
+        .fifth-year .course-item:before {
+            background-color: #8b5cf6;
         }
 
         .course-item:hover {
@@ -514,7 +599,7 @@
         }
 
         .btn-submit {
-            background: linear-gradient(to right, #10b981, #059669);
+            background: var(--success-gradient);
             color: white;
             border: none;
             padding: 15px 25px;
@@ -572,15 +657,15 @@
         }
 
         .admin-btn.delete {
-            background: linear-gradient(to right, #ef4444, #dc2626);
+            background: var(--danger-gradient);
         }
 
         .admin-btn.export {
-            background: linear-gradient(to right, #8b5cf6, #7c3aed);
+            background: var(--secondary-gradient);
         }
 
         .admin-btn.upload {
-            background: linear-gradient(to right, #10b981, #059669);
+            background: var(--success-gradient);
         }
 
         .upload-container {
@@ -623,6 +708,7 @@
             transform: translateY(-3px);
         }
 
+        /* تصميم جديد لبطاقات الإحصائيات */
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -631,21 +717,24 @@
         }
 
         .stat-card {
-            background: linear-gradient(to right, #ffffff, #f8fafc);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
             padding: 20px;
             border-radius: 12px;
             text-align: center;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e2e8f0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
             animation: fadeInUp 0.5s ease both;
+            cursor: pointer;
         }
 
         .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 1);
         }
 
         .stat-card:before {
@@ -655,14 +744,36 @@
             right: 0;
             width: 100%;
             height: 4px;
+        }
+
+        .stat-card:nth-child(1):before {
             background: linear-gradient(to right, #3b82f6, #1d4ed8);
+        }
+
+        .stat-card:nth-child(2):before {
+            background: linear-gradient(to right, #10b981, #059669);
+        }
+
+        .stat-card:nth-child(3):before {
+            background: linear-gradient(to right, #8b5cf6, #7c3aed);
+        }
+
+        .stat-card:nth-child(4):before {
+            background: linear-gradient(to right, #f59e0b, #d97706);
+        }
+
+        .stat-card:nth-child(5):before {
+            background: linear-gradient(to right, #ef4444, #dc2626);
         }
 
         .stat-number {
             font-size: 28px;
             font-weight: 800;
-            color: #3b82f6;
             margin-bottom: 8px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .stat-label {
@@ -672,39 +783,38 @@
             line-height: 1.3;
         }
 
-        /* جدول البيانات */
-        .data-table-container {
-            background-color: white;
+        /* تحسينات نظام الفلترة */
+        .filters-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
             margin-bottom: 20px;
-            border: 2px solid #e5e7eb;
-            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             animation: fadeInUp 0.5s ease both;
         }
 
-        .search-container {
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
             margin-bottom: 15px;
+        }
+
+        .filter-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .search-input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 2px solid #e5e7eb;
-            border-radius: 10px;
-            font-size: 15px;
-            transition: all 0.3s;
-            width: 100%;
-        }
-
-        .search-input:focus {
-            border-color: #3b82f6;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        .filter-label {
+            font-weight: 600;
+            color: #1e3c72;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .filter-select {
@@ -713,7 +823,78 @@
             border-radius: 10px;
             font-size: 15px;
             width: 100%;
-            background-color: white;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .search-input {
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .search-input:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .filters-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-btn.apply {
+            background: linear-gradient(to right, #3b82f6, #1d4ed8);
+            color: white;
+        }
+
+        .filter-btn.reset {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* جدول البيانات */
+        .data-table-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            animation: fadeInUp 0.5s ease both;
         }
 
         /* تصميم الجدول */
@@ -759,8 +940,8 @@
 
         /* تصميم المقررات في الجدول */
         .courses-details {
-            min-width: 200px;
-            max-width: 250px;
+            min-width: 250px;
+            max-width: 300px;
         }
 
         .course-detail-item {
@@ -784,6 +965,17 @@
             line-height: 1.3;
         }
 
+        .course-team-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 3px;
+            align-self: flex-start;
+            color: white;
+        }
+
         .course-same-book {
             font-size: 11px;
             padding: 3px 8px;
@@ -803,7 +995,7 @@
         }
 
         .logout-btn {
-            background: linear-gradient(to right, #ef4444, #dc2626);
+            background: var(--danger-gradient);
             color: white;
             border: none;
             padding: 12px 20px;
@@ -901,7 +1093,7 @@
             right: 0;
             width: 100%;
             height: 4px;
-            background: linear-gradient(to right, #10b981, #059669);
+            background: var(--success-gradient);
             border-radius: 15px 15px 0 0;
         }
 
@@ -987,7 +1179,7 @@
         }
 
         .btn-edit {
-            background: linear-gradient(to right, #f59e0b, #d97706);
+            background: var(--warning-gradient);
             color: white;
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
         }
@@ -998,7 +1190,7 @@
         }
 
         .btn-confirm {
-            background: linear-gradient(to right, #10b981, #059669);
+            background: var(--success-gradient);
             color: white;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
         }
@@ -1029,6 +1221,7 @@
             line-height: 1.3;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            backdrop-filter: blur(10px);
         }
 
         .notification.success {
@@ -1085,7 +1278,7 @@
 
         /* رسالة النجاح */
         .success-message {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: var(--success-gradient);
             color: white;
             padding: 20px;
             border-radius: 15px;
@@ -1128,6 +1321,10 @@
             color: rgba(255, 255, 255, 0.8);
             font-size: 13px;
             line-height: 1.4;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .designer-name {
@@ -1135,6 +1332,219 @@
             color: white;
             font-size: 14px;
             margin-bottom: 5px;
+        }
+
+        /* شاشة تسجيل دخول الأدمن */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+            animation: slideInUp 0.5s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .login-box h2 {
+            color: #1e3c72;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s;
+        }
+
+        .login-box input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-back {
+            width: 100%;
+            padding: 12px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 2px solid #ef4444;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        /* موديول تفاصيل الإحصائيات */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideInUp 0.5s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e3c72;
+            margin: 0;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #ef4444;
+            transform: rotate(90deg);
+        }
+
+        .modal-content {
+            margin-bottom: 20px;
+        }
+
+        .modal-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .modal-stat-item {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .modal-stat-label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(to right, #3b82f6, #1d4ed8);
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         /* تحسينات للجوال */
@@ -1227,7 +1637,7 @@
                 font-size: 24px;
             }
             
-            .data-table-container {
+            .data-table-container, .filters-container {
                 padding: 15px;
             }
             
@@ -1238,6 +1648,22 @@
                 max-width: calc(100% - 20px);
                 font-size: 13px;
                 padding: 10px 12px;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .modal {
+                padding: 20px;
+            }
+            
+            .modal-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -1270,11 +1696,7 @@
                 flex-wrap: nowrap;
             }
             
-            .search-container {
-                flex-direction: row;
-            }
-            
-            .filter-select {
+            .search-input {
                 min-width: 150px;
             }
         }
@@ -1341,6 +1763,13 @@
     </style>
 </head>
 <body>
+    <!-- خلفية متحركة -->
+    <div class="bg-animation">
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+    </div>
+
     <!-- زر التحكم الصغير -->
     <button id="adminControlBtn" class="admin-control-btn">
         <i class="fas fa-cogs"></i>
@@ -1354,7 +1783,6 @@
                 <div class="university-title">جامعة المنيا</div>
                 <div class="college-title">كلية الطب البيطري</div>
                 <div class="unit-title">وحدة تكنولوجيا المعلومات</div>
-                <div class="unit-title">تصميم مهندس بولس سمير</div>
             </div>
 
             <div class="form-container">
@@ -1390,7 +1818,7 @@
                     <div class="form-group">
                         <label class="section-title"><i class="fas fa-book"></i> المقررات الدراسية</label>
                         <p style="color: #64748b; margin-bottom: 15px; font-size: 13px; padding: 10px; background-color: #f8fafc; border-radius: 8px; line-height: 1.4;">
-                            اختر الفرق والمقررات الخاصة بحضرتك ثم حدد ما إذا كان نفس الكتاب العام السابق ام لا
+                            اختر الفرق والمقررات الخاصة بك ثم حدد ما إذا كان نفس الكتاب العام السابق
                         </p>
                         
                         <div id="teamsContainer" class="teams-container">
@@ -1493,22 +1921,56 @@
 
             <!-- قسم البيانات -->
             <div id="dataTab" class="admin-section hidden">
+                <div class="filters-container">
+                    <h2 class="section-title"><i class="fas fa-filter"></i> فلترة البيانات</h2>
+                    
+                    <div class="filters-grid">
+                        <div class="filter-group">
+                            <label class="filter-label"><i class="fas fa-search"></i> البحث:</label>
+                            <input type="text" id="searchInput" class="search-input" placeholder="اسم الأستاذ، الرقم القومي، الموبايل...">
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label"><i class="fas fa-users"></i> الفرقة:</label>
+                            <select id="teamFilter" class="filter-select">
+                                <option value="">جميع الفرق</option>
+                                <option value="الفرقة الأولى">الفرقة الأولى</option>
+                                <option value="الفرقة الثانية">الفرقة الثانية</option>
+                                <option value="الفرقة الثالثة">الفرقة الثالثة</option>
+                                <option value="الفرقة الرابعة">الفرقة الرابعة</option>
+                                <option value="الفرقة الخامسة">الفرقة الخامسة</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label"><i class="fas fa-book"></i> المقرر:</label>
+                            <select id="courseFilter" class="filter-select">
+                                <option value="">جميع المقررات</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label"><i class="fas fa-book-open"></i> نوع الكتاب:</label>
+                            <select id="bookFilter" class="filter-select">
+                                <option value="">جميع الأنواع</option>
+                                <option value="نفس">نفس الكتاب العام السابق</option>
+                                <option value="جديد">كتاب جديد</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="filters-actions">
+                        <button class="filter-btn apply" onclick="applyFilters()">
+                            <i class="fas fa-filter"></i> تطبيق الفلترة
+                        </button>
+                        <button class="filter-btn reset" onclick="resetFilters()">
+                            <i class="fas fa-redo"></i> إعادة تعيين
+                        </button>
+                    </div>
+                </div>
+                
                 <div class="data-table-container">
                     <h2 class="section-title"><i class="fas fa-table"></i> تفاصيل البيانات المرسلة</h2>
-                    
-                    <div class="search-container">
-                        <input type="text" id="searchInput" class="search-input" placeholder="بحث باسم الأستاذ، الرقم القومي، الموبايل أو البريد...">
-                        <select id="teamFilter" class="filter-select">
-                            <option value="">جميع الفرق</option>
-                            <option value="الفرقة الأولى">الفرقة الأولى</option>
-                            <option value="الفرقة الثانية">الفرقة الثانية</option>
-                            <option value="الفرقة الثالثة">الفرقة الثالثة</option>
-                            <option value="الفرقة الرابعة">الفرقة الرابعة</option>
-                        </select>
-                        <select id="courseFilter" class="filter-select">
-                            <option value="">جميع المقررات</option>
-                        </select>
-                    </div>
                     
                     <div class="data-table-wrapper scrollable-content" style="max-height: 500px;">
                         <div id="dataTable">
@@ -1576,6 +2038,25 @@
         </div>
     </div>
 
+    <!-- موديول تفاصيل الإحصائيات -->
+    <div id="statsModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">تفاصيل الإحصائيات</h3>
+                <button class="close-modal" onclick="closeStatsModal()">&times;</button>
+            </div>
+            <div class="modal-content" id="modalContent">
+                <!-- سيتم ملء المحتوى هنا -->
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn primary" onclick="exportExcelFromModal()">
+                    <i class="fas fa-file-export"></i> تصدير إلى Excel
+                </button>
+                <button class="modal-btn secondary" onclick="closeStatsModal()">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
     <!-- منطقة الإشعارات -->
     <div id="notificationArea"></div>
 
@@ -1600,9 +2081,10 @@
         let professorsData = [];
         let filteredProfessorsData = [];
         let currentPage = 1;
-        const itemsPerPage = 5; // تقليل عدد العناصر في الصفحة للجوال
+        const itemsPerPage = 5;
         let selectedFile = null;
         let uploadedCoursesData = [];
+        let currentStatType = '';
         
         // ألوان مميزة للفرق
         const teamColors = {
@@ -1625,6 +2107,11 @@
                 color: '#ef4444',
                 icon: '4',
                 class: 'fourth-year'
+            },
+            'الفرقة الخامسة': {
+                color: '#8b5cf6',
+                icon: '5',
+                class: 'fifth-year'
             }
         };
 
@@ -1640,14 +2127,6 @@
             // إظهار شاشة المستخدم مباشرة
             document.getElementById('userScreen').classList.remove('hidden');
             document.getElementById('adminScreen').classList.add('hidden');
-            
-            // إظهار زر التحكم الصغير
-            document.getElementById('adminControlBtn').classList.remove('hidden');
-            
-            // رسالة ترحيبية
-            setTimeout(() => {
-                showNotification('مرحباً بك في نظام إدارة بيانات أعضاء هيئة التدريس', 'info');
-            }, 1000);
         });
 
         // تحميل جميع البيانات
@@ -1713,25 +2192,10 @@
             // زر العودة لشاشة المستخدم
             document.getElementById('backToUserBtn').addEventListener('click', backToUserScreen);
             
-            // البحث الفوري
-            document.getElementById('searchInput')?.addEventListener('input', function() {
-                filterProfessorsTable();
-            });
-            
-            // تصفية حسب الفرقة
-            document.getElementById('teamFilter')?.addEventListener('change', function() {
-                filterProfessorsTable();
-            });
-            
-            // تصفية حسب المقرر
-            document.getElementById('courseFilter')?.addEventListener('change', function() {
-                filterProfessorsTable();
-            });
-            
-            // إغلاق شاشة تسجيل الدخول بالنقر خارجها
-            document.getElementById('adminLoginScreen').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    hideAdminLogin();
+            // البحث عند الضغط على Enter
+            document.getElementById('searchInput')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    applyFilters();
                 }
             });
             
@@ -1861,6 +2325,16 @@
                         { id: 403, name: "صحة اللحوم والألبان", hasPreviousBook: true },
                         { id: 404, name: "التشريح المرضي", hasPreviousBook: false }
                     ]
+                },
+                {
+                    id: 5,
+                    name: "الفرقة الخامسة",
+                    courses: [
+                        { id: 501, name: "الطب الوقائي", hasPreviousBook: true },
+                        { id: 502, name: "الأمراض المشتركة", hasPreviousBook: false },
+                        { id: 503, name: "الرعاية الصحية", hasPreviousBook: true },
+                        { id: 504, name: "إدارة المزارع", hasPreviousBook: false }
+                    ]
                 }
             ];
         }
@@ -1886,8 +2360,7 @@
             resetForm();
             
             // إعادة تعيين الفلترة
-            currentPage = 1;
-            filteredProfessorsData = [...professorsData];
+            resetFilters();
             
             showNotification('تم العودة إلى شاشة المستخدم', 'info');
         }
@@ -1904,7 +2377,7 @@
                 updateAdminStats();
                 populateCourseFilter();
                 renderUploadedCoursesTable();
-                showNotification('تم تسجيل الدخول بنجاح إلى لوحة التحكم', 'success');
+                showNotification('تم تسجيل الدخول إلى لوحة التحكم', 'success');
             } else {
                 showNotification('كلمة المرور غير صحيحة', 'error');
                 document.getElementById('adminPassword').value = '';
@@ -1977,7 +2450,7 @@
                                     <label for="course_${course.id}" class="course-name text-truncate">${course.name}</label>
                                 </div>
                                 <div class="same-book-container">
-                                    <label for="sameBook_${course.id}">نفس الكتاب السابق</label>
+                                    <label for="sameBook_${course.id}">نفس الكتاب العام السابق</label>
                                     <input type="checkbox" id="sameBook_${course.id}" class="same-book-checkbox" ${course.hasPreviousBook ? 'checked' : ''}>
                                 </div>
                             </div>
@@ -2169,11 +2642,16 @@
                 });
                 
                 const teamColor = teamColors[teamName]?.color || '#3b82f6';
+                const teamBadgeStyle = `background-color: ${teamColor}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px;`;
+                
                 coursesHTML += `
                     <div class="review-course-item" style="border-left-color: ${teamColor}; animation-delay: ${index * 0.1}s">
                         <div class="text-truncate">${courseName}</div>
-                        <div class="course-same-book ${sameBook ? 'yes' : 'no'}">
-                            ${sameBook ? 'نفس الكتاب' : 'جديد'}
+                        <div style="display: flex; gap: 8px;">
+                            <span style="${teamBadgeStyle}">${teamName}</span>
+                            <div class="course-same-book ${sameBook ? 'yes' : 'no'}">
+                                ${sameBook ? 'نفس الكتاب العام السابق' : 'جديد'}
+                            </div>
                         </div>
                     </div>
                 `;
@@ -2267,7 +2745,7 @@
                 })
                 .catch((error) => {
                     console.error('Error saving data:', error);
-                    showNotification('حدث خطأ أثناء حفظ البيانات. يرجى المحاولة مرة أخرى.', 'error');
+                    showNotification('حدث خطأ أثناء حفظ البيانات', 'error');
                 });
         }
 
@@ -2348,11 +2826,16 @@
                     team.courses.forEach((course, courseIndex) => {
                         const sameBookText = course.hasPreviousBook ? 'نعم' : 'لا';
                         const sameBookClass = course.hasPreviousBook ? 'yes' : 'no';
+                        const teamColor = teamColors[team.name]?.color || '#3b82f6';
+                        
                         coursesList += `
-                            <div class="course-detail-item" style="animation-delay: ${(index * 0.1) + (courseIndex * 0.05)}s">
+                            <div class="course-detail-item" style="animation-delay: ${(index * 0.1) + (courseIndex * 0.05)}s; border-right-color: ${teamColor}">
                                 <div class="course-name-detail text-truncate">${course.name}</div>
-                                <div class="course-same-book ${sameBookClass}">
-                                    ${sameBookText}
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    <span class="course-team-badge" style="background-color: ${teamColor}">${team.name}</span>
+                                    <div class="course-same-book ${sameBookClass}">
+                                        ${sameBookText}
+                                    </div>
                                 </div>
                             </div>
                         `;
@@ -2448,12 +2931,24 @@
             let totalCourses = 0;
             let totalSameBook = 0;
             
+            // حساب عدد المقررات حسب الفرق
+            const coursesByTeam = {
+                'الفرقة الأولى': 0,
+                'الفرقة الثانية': 0,
+                'الفرقة الثالثة': 0,
+                'الفرقة الرابعة': 0,
+                'الفرقة الخامسة': 0
+            };
+            
             professorsData.forEach(professor => {
                 if (professor.courses) {
                     totalCourses += professor.courses.length;
                     professor.courses.forEach(course => {
                         if (course.samePreviousBook) {
                             totalSameBook++;
+                        }
+                        if (coursesByTeam.hasOwnProperty(course.team)) {
+                            coursesByTeam[course.team]++;
                         }
                     });
                 }
@@ -2470,23 +2965,443 @@
             });
             
             statsContainer.innerHTML = `
-                <div class="stat-card" style="animation-delay: 0s">
+                <div class="stat-card" style="animation-delay: 0s" onclick="showStatsModal('totalProfessors')">
                     <div class="stat-number">${totalProfessors}</div>
                     <div class="stat-label">عدد الأساتذة</div>
                 </div>
-                <div class="stat-card" style="animation-delay: 0.1s">
+                <div class="stat-card" style="animation-delay: 0.1s" onclick="showStatsModal('totalCourses')">
                     <div class="stat-number">${totalCourses}</div>
                     <div class="stat-label">إجمالي المقررات</div>
                 </div>
-                <div class="stat-card" style="animation-delay: 0.2s">
+                <div class="stat-card" style="animation-delay: 0.2s" onclick="showStatsModal('uniqueCourses')">
                     <div class="stat-number">${uniqueCourses.size}</div>
                     <div class="stat-label">مقررات مختلفة</div>
                 </div>
-                <div class="stat-card" style="animation-delay: 0.3s">
+                <div class="stat-card" style="animation-delay: 0.3s" onclick="showStatsModal('sameBook')">
                     <div class="stat-number">${totalSameBook}</div>
-                    <div class="stat-label">نفس الكتاب السابق</div>
+                    <div class="stat-label">نفس الكتاب العام السابق</div>
+                </div>
+                <div class="stat-card" style="animation-delay: 0.4s" onclick="showStatsModal('teamsDistribution')">
+                    <div class="stat-number">${Object.keys(coursesByTeam).filter(team => coursesByTeam[team] > 0).length}</div>
+                    <div class="stat-label">فرق نشطة</div>
                 </div>
             `;
+        }
+
+        // عرض موديول تفاصيل الإحصائيات
+        function showStatsModal(statType) {
+            currentStatType = statType;
+            let modalTitle = '';
+            let modalContent = '';
+            
+            const totalProfessors = professorsData.length;
+            let totalCourses = 0;
+            let totalSameBook = 0;
+            
+            // حساب عدد المقررات حسب الفرق
+            const coursesByTeam = {
+                'الفرقة الأولى': 0,
+                'الفرقة الثانية': 0,
+                'الفرقة الثالثة': 0,
+                'الفرقة الرابعة': 0,
+                'الفرقة الخامسة': 0
+            };
+            
+            // حساب المقررات الفريدة
+            const uniqueCourses = new Set();
+            const professorsByCourse = {};
+            
+            professorsData.forEach(professor => {
+                if (professor.courses) {
+                    totalCourses += professor.courses.length;
+                    professor.courses.forEach(course => {
+                        if (course.samePreviousBook) {
+                            totalSameBook++;
+                        }
+                        if (coursesByTeam.hasOwnProperty(course.team)) {
+                            coursesByTeam[course.team]++;
+                        }
+                        uniqueCourses.add(course.name);
+                        
+                        if (!professorsByCourse[course.name]) {
+                            professorsByCourse[course.name] = [];
+                        }
+                        professorsByCourse[course.name].push(professor.name);
+                    });
+                }
+            });
+            
+            switch(statType) {
+                case 'totalProfessors':
+                    modalTitle = 'تفاصيل عدد الأساتذة';
+                    modalContent = `
+                        <div class="modal-stats">
+                            <div class="modal-stat-item">
+                                <div class="modal-stat-value">${totalProfessors}</div>
+                                <div class="modal-stat-label">إجمالي عدد الأساتذة</div>
+                            </div>
+                            <div class="modal-stat-item">
+                                <div class="modal-stat-value">${professorsData.length > 0 ? new Date(professorsData[0].submissionDate).toLocaleDateString('ar-EG') : 'لا يوجد'}</div>
+                                <div class="modal-stat-label">آخر إضافة</div>
+                            </div>
+                        </div>
+                        <h4 style="color: #1e3c72; margin-bottom: 10px; font-size: 16px;">آخر 5 أساتذة تم إضافتهم:</h4>
+                        <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px;">
+                            ${professorsData.slice(0, 5).map((professor, index) => `
+                                <div style="padding: 8px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-weight: 600; color: #374151;">${professor.name}</span>
+                                    <span style="font-size: 12px; color: #64748b;">${new Date(professor.submissionDate).toLocaleDateString('ar-EG')}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    break;
+                    
+                case 'totalCourses':
+                    modalTitle = 'تفاصيل إجمالي المقررات';
+                    modalContent = `
+                        <div class="modal-stats">
+                            <div class="modal-stat-item">
+                                <div class="modal-stat-value">${totalCourses}</div>
+                                <div class="modal-stat-label">إجمالي المقررات</div>
+                            </div>
+                            <div class="modal-stat-item">
+                                <div class="modal-stat-value">${professorsData.length > 0 ? (totalCourses / professorsData.length).toFixed(1) : 0}</div>
+                                <div class="modal-stat-label">معدل المقررات لكل أستاذ</div>
+                            </div>
+                        </div>
+                        <h4 style="color: #1e3c72; margin-bottom: 10px; font-size: 16px;">توزيع المقررات حسب الفرق:</h4>
+                        <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px;">
+                            ${Object.entries(coursesByTeam).map(([team, count]) => {
+                                const teamColor = teamColors[team]?.color || '#3b82f6';
+                                return `
+                                    <div style="padding: 8px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="font-weight: 600; color: ${teamColor};">${team}</span>
+                                        <span style="font-size: 14px; color: #64748b;">${count} مقرر</span>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                    break;
+                    
+                case 'uniqueCourses':
+                    modalTitle = 'تفاصيل المقررات المختلفة';
+                    modalContent = `
+                        <div class="modal-stats">
+                            <div class="modal-stat-item">
+                                <div class="modal-stat-value">${uniqueCourses.size}</div>
+                                <div class="modal-stat-label">عدد المقررات المختلفة</div>
+                            </div>
+                            <div class="modal-stat-item">
+                                <div class="modal-stat-value">${totalCourses > 0 ? ((uniqueCourses.size / totalCourses) * 100).toFixed(1) : 0}%</div>
+                                <div class="modal-stat-label">نسبة التنوع</div>
+                            </div>
+                        </div>
+                        <h4 style="color: #1e3c72; margin-bottom: 10px; font-size: 16px;">المقررات الأكثر تكراراً:</h4>
+                        <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px;">
+                            ${Array.from(uniqueCourses).slice(0, 10).map(course => {
+                                const professorsCount = professorsByCourse[course] ? professorsByCourse[course].length : 0;
+                                return `
+                                    <div style="padding: 8px; border-bottom: 1px solid #e5e7eb;">
+                                        <div style="font-weight: 600; color: #374151; margin-bottom: 4px;">${course}</div>
+                                        <div style="font-size: 12px; color: #64748b;">${professorsCount} أستاذ</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                    break;
+                    
+                case 'sameBook':
+                    modalTitle = 'تفاصيل نفس الكتاب العام السابق';
+                    modalContent = `
+                        <div class="modal-stats">
+                            <div class="modal-stat-item">
+                                <div class="modal-stat-value">${totalSameBook}</div>
+                                <div class="modal-stat-label">إجمالي نفس الكتاب</div>
+                            </div>
+                            <div class="modal-stat-item">
+                                <div class="modal-stat-value">${totalCourses > 0 ? ((totalSameBook / totalCourses) * 100).toFixed(1) : 0}%</div>
+                                <div class="modal-stat-label">النسبة المئوية</div>
+                            </div>
+                        </div>
+                        <h4 style="color: #1e3c72; margin-bottom: 10px; font-size: 16px;">توزيع نفس الكتاب حسب الفرق:</h4>
+                        <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px;">
+                            ${Object.entries(coursesByTeam).map(([team, count]) => {
+                                let sameBookCount = 0;
+                                professorsData.forEach(professor => {
+                                    if (professor.courses) {
+                                        professor.courses.forEach(course => {
+                                            if (course.team === team && course.samePreviousBook) {
+                                                sameBookCount++;
+                                            }
+                                        });
+                                    }
+                                });
+                                const percentage = count > 0 ? ((sameBookCount / count) * 100).toFixed(1) : 0;
+                                const teamColor = teamColors[team]?.color || '#3b82f6';
+                                return `
+                                    <div style="padding: 8px; border-bottom: 1px solid #e5e7eb;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                            <span style="font-weight: 600; color: ${teamColor};">${team}</span>
+                                            <span style="font-size: 14px; color: #64748b;">${sameBookCount} / ${count}</span>
+                                        </div>
+                                        <div style="height: 8px; background-color: #e5e7eb; border-radius: 4px; overflow: hidden;">
+                                            <div style="height: 100%; width: ${percentage}%; background-color: ${teamColor}; border-radius: 4px;"></div>
+                                        </div>
+                                        <div style="font-size: 12px; color: #64748b; text-align: left; margin-top: 4px;">${percentage}%</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                    break;
+                    
+                case 'teamsDistribution':
+                    modalTitle = 'توزيع الفرق النشطة';
+                    modalContent = `
+                        <div class="modal-stats">
+                            <div class="modal-stat-item">
+                                <div class="modal-stat-value">${Object.keys(coursesByTeam).filter(team => coursesByTeam[team] > 0).length}</div>
+                                <div class="modal-stat-label">فرق نشطة</div>
+                            </div>
+                            <div class="modal-stat-item">
+                                <div class="modal-stat-value">${Object.keys(coursesByTeam).length}</div>
+                                <div class="modal-stat-label">إجمالي الفرق</div>
+                            </div>
+                        </div>
+                        <h4 style="color: #1e3c72; margin-bottom: 10px; font-size: 16px;">توزيع المقررات حسب الفرق:</h4>
+                        <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px;">
+                            ${Object.entries(coursesByTeam).map(([team, count]) => {
+                                const teamColor = teamColors[team]?.color || '#3b82f6';
+                                const isActive = count > 0;
+                                return `
+                                    <div style="padding: 8px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <div style="width: 20px; height: 20px; border-radius: 50%; background-color: ${teamColor};"></div>
+                                            <span style="font-weight: 600; color: ${isActive ? '#374151' : '#94a3b8'};">${team}</span>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 14px; color: ${isActive ? '#64748b' : '#cbd5e1'};">
+                                                ${count} مقرر
+                                            </span>
+                                            ${isActive ? 
+                                                '<i class="fas fa-check-circle" style="color: #10b981;"></i>' : 
+                                                '<i class="fas fa-times-circle" style="color: #ef4444;"></i>'
+                                            }
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                    break;
+            }
+            
+            document.getElementById('modalTitle').textContent = modalTitle;
+            document.getElementById('modalContent').innerHTML = modalContent;
+            document.getElementById('statsModal').classList.remove('hidden');
+        }
+
+        // إغلاق موديول الإحصائيات
+        function closeStatsModal() {
+            document.getElementById('statsModal').classList.add('hidden');
+        }
+
+        // تصدير Excel من الموديول
+        function exportExcelFromModal() {
+            switch(currentStatType) {
+                case 'totalProfessors':
+                    exportProfessorsExcel();
+                    break;
+                case 'totalCourses':
+                case 'uniqueCourses':
+                case 'sameBook':
+                case 'teamsDistribution':
+                    exportCoursesExcel();
+                    break;
+            }
+        }
+
+        // تصدير Excel للأساتذة
+        function exportProfessorsExcel() {
+            if (professorsData.length === 0) {
+                showNotification('لا توجد بيانات للتصدير', 'error');
+                return;
+            }
+            
+            const exportData = professorsData.map(professor => {
+                const data = {
+                    'اسم الأستاذ': professor.name,
+                    'الرقم القومي': professor.nationalId,
+                    'الموبايل': professor.mobile,
+                    'البريد الإلكتروني': professor.email || '',
+                    'عدد المقررات': professor.courses ? professor.courses.length : 0,
+                    'نفس الكتاب العام السابق': professor.courses ? professor.courses.filter(c => c.samePreviousBook).length : 0,
+                    'تاريخ الإرسال': new Date(professor.submissionDate).toLocaleDateString('ar-EG')
+                };
+                
+                // إضافة المقررات كصفوف منفصلة
+                if (professor.courses && professor.courses.length > 0) {
+                    professor.courses.forEach((course, index) => {
+                        data[`المقرر ${index + 1}`] = course.name;
+                        data[`الفرقة ${index + 1}`] = course.team;
+                        data[`نوع الكتاب ${index + 1}`] = course.samePreviousBook ? 'نفس الكتاب العام السابق' : 'جديد';
+                    });
+                }
+                
+                return data;
+            });
+            
+            createAndDownloadExcel(exportData, 'بيانات_الأساتذة', 'الأساتذة');
+        }
+
+        // تصدير Excel للمقررات
+        function exportCoursesExcel() {
+            // جمع جميع المقررات من جميع الأساتذة
+            const allCourses = [];
+            professorsData.forEach(professor => {
+                if (professor.courses) {
+                    professor.courses.forEach(course => {
+                        allCourses.push({
+                            'اسم المقرر': course.name,
+                            'الفرقة': course.team,
+                            'نوع الكتاب': course.samePreviousBook ? 'نفس الكتاب العام السابق' : 'جديد',
+                            'اسم الأستاذ': professor.name,
+                            'الرقم القومي': professor.nationalId,
+                            'البريد الإلكتروني': professor.email || '',
+                            'تاريخ الإرسال': new Date(professor.submissionDate).toLocaleDateString('ar-EG')
+                        });
+                    });
+                }
+            });
+            
+            if (allCourses.length === 0) {
+                showNotification('لا توجد بيانات مقررات للتصدير', 'error');
+                return;
+            }
+            
+            createAndDownloadExcel(allCourses, 'بيانات_المقررات', 'المقررات');
+        }
+
+        // إنشاء وتنزيل ملف Excel
+        function createAndDownloadExcel(data, fileName, sheetName) {
+            try {
+                // إنشاء ورقة عمل
+                const worksheet = XLSX.utils.json_to_sheet(data);
+                
+                // إعداد تنسيقات الجدول
+                const wscols = [];
+                Object.keys(data[0]).forEach(() => {
+                    wscols.push({ wch: 25 }); // عرض الأعمدة
+                });
+                worksheet['!cols'] = wscols;
+                
+                // تحديد نطاق البيانات
+                const range = XLSX.utils.decode_range(worksheet['!ref']);
+                
+                // تنسيق الرأس
+                for (let C = range.s.c; C <= range.e.c; ++C) {
+                    const address = XLSX.utils.encode_cell({ r: 0, c: C });
+                    if (!worksheet[address]) continue;
+                    
+                    worksheet[address].s = {
+                        font: { 
+                            bold: true, 
+                            color: { rgb: "FFFFFF" },
+                            sz: 12
+                        },
+                        fill: { 
+                            fgColor: { rgb: "1E3C72" },
+                            patternType: "solid"
+                        },
+                        alignment: { 
+                            horizontal: "center",
+                            vertical: "center"
+                        },
+                        border: {
+                            top: { style: "thin", color: { rgb: "FFFFFF" } },
+                            bottom: { style: "thin", color: { rgb: "FFFFFF" } },
+                            left: { style: "thin", color: { rgb: "FFFFFF" } },
+                            right: { style: "thin", color: { rgb: "FFFFFF" } }
+                        }
+                    };
+                }
+                
+                // تنسيق الخلايا
+                for (let R = 1; R <= range.e.r; ++R) {
+                    for (let C = range.s.c; C <= range.e.c; ++C) {
+                        const address = XLSX.utils.encode_cell({ r: R, c: C });
+                        if (!worksheet[address]) continue;
+                        
+                        // ألوان متناوبة للصفوف
+                        const bgColor = R % 2 === 0 ? "F8FAFC" : "FFFFFF";
+                        
+                        // تحديد لون النص بناءً على نوع البيانات
+                        let textColor = "374151";
+                        const cellValue = worksheet[address].v;
+                        
+                        if (typeof cellValue === 'string') {
+                            if (cellValue === 'نفس الكتاب العام السابق' || cellValue === 'نعم') {
+                                textColor = "166534";
+                            } else if (cellValue === 'جديد' || cellValue === 'لا') {
+                                textColor = "991b1b";
+                            }
+                        }
+                        
+                        worksheet[address].s = {
+                            font: { 
+                                color: { rgb: textColor },
+                                sz: 11
+                            },
+                            fill: { 
+                                fgColor: { rgb: bgColor },
+                                patternType: "solid"
+                            },
+                            alignment: { 
+                                horizontal: "right",
+                                vertical: "center",
+                                wrapText: true
+                            },
+                            border: {
+                                top: { style: "thin", color: { rgb: "E5E7EB" } },
+                                bottom: { style: "thin", color: { rgb: "E5E7EB" } },
+                                left: { style: "thin", color: { rgb: "E5E7EB" } },
+                                right: { style: "thin", color: { rgb: "E5E7EB" } }
+                            }
+                        };
+                    }
+                }
+                
+                // إضافة فواصل بين الصفوف
+                for (let R = 2; R <= range.e.r; R += 2) {
+                    const address = XLSX.utils.encode_cell({ r: R, c: 0 });
+                    if (!worksheet[address]) continue;
+                    
+                    // إضافة خط فاصل
+                    for (let C = range.s.c; C <= range.e.c; ++C) {
+                        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+                        if (worksheet[cellAddress] && worksheet[cellAddress].s) {
+                            worksheet[cellAddress].s.border.top = { style: "thin", color: { rgb: "94A3B8" } };
+                        }
+                    }
+                }
+                
+                // إنشاء المصنف
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, sheetName || 'البيانات');
+                
+                // إنشاء الملف وتنزيله
+                const date = new Date().toISOString().slice(0, 10);
+                XLSX.writeFile(workbook, `${fileName}_${date}.xlsx`);
+                
+                showNotification('تم تصدير البيانات إلى Excel بنجاح', 'success');
+                closeStatsModal();
+            } catch (error) {
+                console.error('Error exporting to Excel:', error);
+                showNotification('حدث خطأ أثناء التصدير إلى Excel', 'error');
+            }
         }
 
         // ملء فلتر المقررات
@@ -2511,6 +3426,61 @@
             Array.from(uniqueCourses).sort().forEach(course => {
                 courseFilter.innerHTML += `<option value="${course}">${course}</option>`;
             });
+        }
+
+        // تطبيق الفلتر
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const teamFilter = document.getElementById('teamFilter').value;
+            const courseFilter = document.getElementById('courseFilter').value;
+            const bookFilter = document.getElementById('bookFilter').value;
+            
+            filteredProfessorsData = professorsData.filter(professor => {
+                // البحث النصي
+                const matchesSearch = !searchTerm || 
+                    professor.name.toLowerCase().includes(searchTerm) ||
+                    professor.nationalId.includes(searchTerm) ||
+                    professor.mobile.includes(searchTerm) ||
+                    (professor.email && professor.email.toLowerCase().includes(searchTerm));
+                
+                // فلترة حسب الفرقة
+                const matchesTeam = !teamFilter || 
+                    (professor.courses && professor.courses.some(course => course.team === teamFilter));
+                
+                // فلترة حسب المقرر
+                const matchesCourse = !courseFilter || 
+                    (professor.courses && professor.courses.some(course => course.name === courseFilter));
+                
+                // فلترة حسب نوع الكتاب
+                const matchesBook = !bookFilter || 
+                    (professor.courses && professor.courses.some(course => {
+                        if (bookFilter === 'نفس') {
+                            return course.samePreviousBook;
+                        } else if (bookFilter === 'جديد') {
+                            return !course.samePreviousBook;
+                        }
+                        return true;
+                    }));
+                
+                return matchesSearch && matchesTeam && matchesCourse && matchesBook;
+            });
+            
+            currentPage = 1;
+            renderProfessorsTable();
+            showNotification(`تم العثور على ${filteredProfessorsData.length} نتيجة`, 'info');
+        }
+
+        // إعادة تعيين الفلتر
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('teamFilter').value = '';
+            document.getElementById('courseFilter').value = '';
+            document.getElementById('bookFilter').value = '';
+            
+            filteredProfessorsData = [...professorsData];
+            currentPage = 1;
+            renderProfessorsTable();
+            showNotification('تم إعادة تعيين الفلتر', 'info');
         }
 
         // عرض جدول الأساتذة (معدل للجوال)
@@ -2545,7 +3515,7 @@
                             <th style="min-width: 120px;">اسم الأستاذ</th>
                             <th style="min-width: 140px;">الرقم القومي</th>
                             <th style="min-width: 120px;">الموبايل</th>
-                            <th style="min-width: 150px;">المقررات المختارة</th>
+                            <th style="min-width: 200px;">المقررات المختارة</th>
                             <th style="min-width: 60px;">عدد المقررات</th>
                             <th style="min-width: 100px;">تاريخ الإرسال</th>
                             <th style="min-width: 80px;">الإجراءات</th>
@@ -2567,11 +3537,16 @@
                 if (professor.courses && professor.courses.length > 0) {
                     professor.courses.forEach((course, courseIndex) => {
                         const teamColor = teamColors[course.team]?.color || '#3b82f6';
+                        const teamBadgeStyle = `background-color: ${teamColor}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600;`;
+                        
                         coursesDetailsHTML += `
                             <div class="course-detail-item" style="border-right-color: ${teamColor}; animation-delay: ${(index * 0.1) + (courseIndex * 0.05)}s">
                                 <div class="course-name-detail text-truncate">${course.name}</div>
-                                <div class="course-same-book ${course.samePreviousBook ? 'yes' : 'no'}">
-                                    ${course.samePreviousBook ? 'نفس الكتاب' : 'جديد'}
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    <span style="${teamBadgeStyle}">${course.team}</span>
+                                    <div class="course-same-book ${course.samePreviousBook ? 'yes' : 'no'}">
+                                        ${course.samePreviousBook ? 'نفس الكتاب العام السابق' : 'جديد'}
+                                    </div>
                                 </div>
                             </div>
                         `;
@@ -2612,35 +3587,6 @@
             // تحديث أزرار الترقيم
             document.getElementById('prevBtn').disabled = currentPage === 1;
             document.getElementById('nextBtn').disabled = currentPage === totalPages;
-        }
-
-        // فلترة جدول الأساتذة
-        function filterProfessorsTable() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const teamFilter = document.getElementById('teamFilter').value;
-            const courseFilter = document.getElementById('courseFilter').value;
-            
-            filteredProfessorsData = professorsData.filter(professor => {
-                // البحث النصي
-                const matchesSearch = !searchTerm || 
-                    professor.name.toLowerCase().includes(searchTerm) ||
-                    professor.nationalId.includes(searchTerm) ||
-                    professor.mobile.includes(searchTerm) ||
-                    (professor.email && professor.email.toLowerCase().includes(searchTerm));
-                
-                // فلترة حسب الفرقة
-                const matchesTeam = !teamFilter || 
-                    (professor.courses && professor.courses.some(course => course.team === teamFilter));
-                
-                // فلترة حسب المقرر
-                const matchesCourse = !courseFilter || 
-                    (professor.courses && professor.courses.some(course => course.name === courseFilter));
-                
-                return matchesSearch && matchesTeam && matchesCourse;
-            });
-            
-            currentPage = 1;
-            renderProfessorsTable();
         }
 
         // الصفحة التالية
@@ -2696,20 +3642,40 @@
         function downloadTemplate() {
             // إنشاء بيانات النموذج
             const templateData = [
-                { 'اسم المقرر': 'تشريح الحيوان', 'الفرقة': 'الفرقة الأولى', 'نفس الكتاب السابق': 'لا' },
-                { 'اسم المقرر': 'فسيولوجيا الحيوان', 'الفرقة': 'الفرقة الأولى', 'نفس الكتاب السابق': 'نعم' },
-                { 'اسم المقرر': 'علم الطفيليات', 'الفرقة': 'الفرقة الثانية', 'نفس الكتاب السابق': 'لا' },
-                { 'اسم المقرر': 'علم البكتيريا', 'الفرقة': 'الفرقة الثانية', 'نفس الكتاب السابق': 'نعم' },
-                { 'اسم المقرر': 'جراحة الحيوان', 'الفرقة': 'الفرقة الثالثة', 'نفس الكتاب السابق': 'نعم' },
-                { 'اسم المقرر': 'طب وصحة الحيوان', 'الفرقة': 'الفرقة الثالثة', 'نفس الكتاب السابق': 'لا' }
+                { 'اسم المقرر': 'تشريح الحيوان', 'الفرقة': 'الفرقة الأولى', 'نفس الكتاب العام السابق': 'لا' },
+                { 'اسم المقرر': 'فسيولوجيا الحيوان', 'الفرقة': 'الفرقة الأولى', 'نفس الكتاب العام السابق': 'نعم' },
+                { 'اسم المقرر': 'علم الطفيليات', 'الفرقة': 'الفرقة الثانية', 'نفس الكتاب العام السابق': 'لا' },
+                { 'اسم المقرر': 'علم البكتيريا', 'الفرقة': 'الفرقة الثانية', 'نفس الكتاب العام السابق': 'نعم' },
+                { 'اسم المقرر': 'جراحة الحيوان', 'الفرقة': 'الفرقة الثالثة', 'نفس الكتاب العام السابق': 'نعم' },
+                { 'اسم المقرر': 'طب وصحة الحيوان', 'الفرقة': 'الفرقة الثالثة', 'نفس الكتاب العام السابق': 'لا' },
+                { 'اسم المقرر': 'الطب الوقائي', 'الفرقة': 'الفرقة الخامسة', 'نفس الكتاب العام السابق': 'نعم' }
             ];
             
-            // إنشاء ورقة عمل
-            const worksheet = XLSX.utils.json_to_sheet(templateData);
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'المقررات');
+            const worksheet = XLSX.utils.json_to_sheet(templateData);
             
-            // إنشاء الملف وتنزيله
+            // تنسيق الجدول
+            const wscols = [
+                { wch: 30 }, // اسم المقرر
+                { wch: 20 }, // الفرقة
+                { wch: 25 }  // نفس الكتاب العام السابق
+            ];
+            worksheet['!cols'] = wscols;
+            
+            // تنسيق الرأس
+            const range = XLSX.utils.decode_range(worksheet['!ref']);
+            for (let C = range.s.c; C <= range.e.c; ++C) {
+                const address = XLSX.utils.encode_cell({ r: 0, c: C });
+                if (!worksheet[address]) continue;
+                
+                worksheet[address].s = {
+                    font: { bold: true, color: { rgb: "FFFFFF" } },
+                    fill: { fgColor: { rgb: "1E3C72" } },
+                    alignment: { horizontal: "center" }
+                };
+            }
+            
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'المقررات');
             XLSX.writeFile(workbook, 'نموذج_المقررات.xlsx');
             showNotification('تم تحميل نموذج Excel بنجاح', 'success');
         }
@@ -2786,7 +3752,7 @@
             jsonData.forEach((row, index) => {
                 const courseName = row['اسم المقرر'] || row['المقرر'] || '';
                 const teamName = row['الفرقة'] || '';
-                const sameBookText = row['نفس الكتاب السابق'] || 'لا';
+                const sameBookText = row['نفس الكتاب العام السابق'] || row['نفس الكتاب السابق'] || 'لا';
                 const hasPreviousBook = sameBookText === 'نعم' || sameBookText === 'yes' || sameBookText === 'true' || sameBookText === true;
                 
                 if (courseName && teamName) {
@@ -2816,46 +3782,9 @@
             return teamsArray;
         }
 
-        // تصدير إلى Excel
+        // تصدير إلى Excel (دالة قديمة للتوافق)
         function exportToExcel() {
-            if (professorsData.length === 0) {
-                showNotification('لا توجد بيانات للتصدير', 'error');
-                return;
-            }
-            
-            // إعداد البيانات للتصدير
-            const exportData = [];
-            
-            professorsData.forEach(professor => {
-                const baseData = {
-                    'اسم الأستاذ': professor.name,
-                    'الرقم القومي': professor.nationalId,
-                    'الموبايل': professor.mobile,
-                    'البريد الإلكتروني': professor.email || '',
-                    'عدد المقررات': professor.courses ? professor.courses.length : 0,
-                    'تاريخ الإرسال': new Date(professor.submissionDate).toLocaleDateString('ar-EG')
-                };
-                
-                // إضافة المقررات كتفاصيل
-                if (professor.courses && professor.courses.length > 0) {
-                    professor.courses.forEach((course, index) => {
-                        baseData[`المقرر ${index + 1}`] = course.name;
-                        baseData[`الفرقة ${index + 1}`] = course.team;
-                        baseData[`نفس الكتاب ${index + 1}`] = course.samePreviousBook ? 'نعم' : 'لا';
-                    });
-                }
-                
-                exportData.push(baseData);
-            });
-            
-            // إنشاء ورقة عمل
-            const worksheet = XLSX.utils.json_to_sheet(exportData);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'بيانات الأساتذة');
-            
-            // إنشاء الملف وتنزيله
-            XLSX.writeFile(workbook, `بيانات_أعضاء_هيئة_التدريس_${new Date().toISOString().slice(0,10)}.xlsx`);
-            showNotification('تم تصدير البيانات إلى Excel بنجاح', 'success');
+            exportProfessorsExcel();
         }
 
         // تحديث البيانات
@@ -2864,76 +3793,31 @@
             loadAllData();
             setTimeout(() => {
                 showNotification('تم تحديث البيانات', 'success');
-            }, 1000);
+            }, 
+                500);
         }
 
-        // إعادة تعيين النموذج
-        function resetForm() {
-            const form = document.getElementById('userForm');
-            if (form) {
-                form.reset();
-            }
-            
-            document.getElementById('successMessage').classList.add('hidden');
-            document.getElementById('reviewScreen').classList.remove('active');
-            document.getElementById('userForm').classList.remove('hidden');
-            
-            const errorMessages = document.querySelectorAll('.error-message');
-            errorMessages.forEach(error => {
-                error.style.display = 'none';
-            });
-            
-            // إعادة تعيين اختيار المقررات
-            const checkboxes = document.querySelectorAll('.course-checkbox');
-            checkboxes.forEach(checkbox => {
-                if (checkbox) checkbox.checked = false;
-            });
-            
-            // إغلاق جميع الفرق المفتوحة
-            const teamContents = document.querySelectorAll('.team-content');
-            const teamHeaders = document.querySelectorAll('.team-header');
-            const toggleIcons = document.querySelectorAll('.team-toggle i');
-            
-            teamContents.forEach(content => {
-                content.classList.remove('expanded');
-            });
-            
-            teamHeaders.forEach(header => {
-                header.classList.remove('active');
-            });
-            
-            toggleIcons.forEach(icon => {
-                icon.classList.remove('fa-chevron-up');
-                icon.classList.add('fa-chevron-down');
-            });
-            
-            // تمرير إلى أعلى الصفحة
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            showNotification('تم إعادة تعيين النموذج، يمكنك إدخال بيانات جديدة', 'info');
-        }
-
-        // عرض علامات التبويب في الأدمن
+        // إظهار تبويب الأدمن
         function showAdminTab(tabName) {
-            // إخفاء جميع الأقسام
+            // إخفاء جميع التبويبات
             document.querySelectorAll('.admin-section').forEach(section => {
                 section.classList.add('hidden');
             });
             
-            // إزالة النشاط من جميع علامات التبويب
+            // إزالة النشاط من جميع التبويبات
             document.querySelectorAll('.admin-tab').forEach(tab => {
                 tab.classList.remove('active');
             });
             
-            // عرض القسم المطلوب
+            // إظهار التبويب المطلوب وإضافة النشاط
             document.getElementById(`${tabName}Tab`).classList.remove('hidden');
+            document.querySelector(`.admin-tab[onclick="showAdminTab('${tabName}')"]`).classList.add('active');
             
-            // تفعيل علامة التبويب
-            document.querySelectorAll('.admin-tab').forEach(tab => {
-                if (tab.getAttribute('onclick') === `showAdminTab('${tabName}')`) {
-                    tab.classList.add('active');
-                }
-            });
+            // تحديث البيانات إذا كان التبويب هو البيانات
+            if (tabName === 'data') {
+                renderProfessorsTable();
+                populateCourseFilter();
+            }
             
             // تمرير إلى أعلى الصفحة على الجوال
             if (window.innerWidth < 768) {
@@ -2941,31 +3825,216 @@
             }
         }
 
-        // عرض الإشعارات
-        function showNotification(message, type = 'info') {
-            const notificationArea = document.getElementById('notificationArea');
-            const notificationId = 'notification-' + Date.now();
+        // إعادة تعيين النموذج
+        function resetForm() {
+            document.getElementById('userForm').reset();
+            document.getElementById('userForm').classList.remove('hidden');
+            document.getElementById('reviewScreen').classList.remove('active');
+            document.getElementById('successMessage').classList.add('hidden');
+            document.getElementById('nameError').style.display = 'none';
+            document.getElementById('nationalIdError').style.display = 'none';
+            document.getElementById('mobileError').style.display = 'none';
+            document.getElementById('emailError').style.display = 'none';
             
+            // إعادة تعيين اختيار المقررات
+            document.querySelectorAll('.course-checkbox').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // إغلاق جميع الفرق
+            document.querySelectorAll('.team-header.active').forEach(header => {
+                header.classList.remove('active');
+                const teamId = header.closest('.team-card').dataset.teamId;
+                document.getElementById(`teamContent_${teamId}`).classList.remove('expanded');
+                header.querySelector('.team-toggle i').classList.remove('fa-chevron-up');
+                header.querySelector('.team-toggle i').classList.add('fa-chevron-down');
+            });
+            
+            // تمرير إلى أعلى الصفحة على الجوال
+            if (window.innerWidth < 768) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            showNotification('تم إعادة تعيين النموذج جاهز لإدخال بيانات جديدة', 'info');
+        }
+
+        // عرض الإشعارات
+        function showNotification(message, type) {
+            const notificationArea = document.getElementById('notificationArea');
+            if (!notificationArea) return;
+            
+            const notificationId = 'notification_' + Date.now();
             const notification = document.createElement('div');
             notification.id = notificationId;
             notification.className = `notification ${type}`;
+            
+            let icon = '';
+            switch(type) {
+                case 'success':
+                    icon = '<i class="fas fa-check-circle"></i>';
+                    break;
+                case 'error':
+                    icon = '<i class="fas fa-exclamation-circle"></i>';
+                    break;
+                case 'info':
+                    icon = '<i class="fas fa-info-circle"></i>';
+                    break;
+            }
+            
             notification.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                ${icon}
                 <span>${message}</span>
             `;
             
             notificationArea.appendChild(notification);
             
-            // إزالة الإشعار بعد 5 ثوانٍ
+            // إزالة الإشعار بعد 5 ثواني
             setTimeout(() => {
                 const notif = document.getElementById(notificationId);
                 if (notif) {
-                    notif.remove();
+                    notif.style.opacity = '0';
+                    notif.style.transform = 'translateX(-20px)';
+                    setTimeout(() => {
+                        if (notif.parentNode) {
+                            notif.parentNode.removeChild(notif);
+                        }
+                    }, 500);
                 }
             }, 5000);
         }
+
+        // منع إعادة تحميل الصفحة عند إرسال النموذج
+        document.getElementById('userForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
+
+        // تحسين تجربة المستخدم على الأجهزة المحمولة
+        if ('ontouchstart' in window) {
+            // إضافة مستمع للأحداث للنقر الطويل
+            document.querySelectorAll('.team-header').forEach(header => {
+                let timer;
+                
+                header.addEventListener('touchstart', function(e) {
+                    timer = setTimeout(() => {
+                        // عرض رسالة النقر الطويل
+                        showNotification('انقر مرة أخرى لتوسيع/طي الفرق', 'info');
+                    }, 1000);
+                }, { passive: true });
+                
+                header.addEventListener('touchend', function(e) {
+                    clearTimeout(timer);
+                }, { passive: true });
+            });
+            
+            // تحسين أداء الجدول على الجوال
+            document.querySelectorAll('.data-table-wrapper').forEach(wrapper => {
+                wrapper.addEventListener('touchmove', function(e) {
+                    e.stopPropagation();
+                }, { passive: true });
+            });
+        }
+
+        // تحميل البيانات عند الظهور لأول مرة
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                if (teamsData.length === 0) {
+                    renderTeamsAndCourses();
+                }
+            }, 300);
+        });
+
+        // حفظ حالة الإدخال في حالة تحديث الصفحة
+        window.addEventListener('beforeunload', function() {
+            // يمكن حفظ البيانات في localStorage إذا لزم الأمر
+        });
+
+        // تحسينات لتجربة المستخدم على iOS
+        if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+            document.querySelectorAll('input, select, textarea').forEach(element => {
+                element.addEventListener('blur', function() {
+                    window.scrollTo(0, 0);
+                });
+            });
+        }
+
+        // إضافة تأثيرات تفاعلية إضافية
+        document.addEventListener('DOMContentLoaded', function() {
+            // تأثير تموج للأزرار
+            document.querySelectorAll('button').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    // إضافة تأثير تموج
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        border-radius: 50%;
+                        background: rgba(255, 255, 255, 0.7);
+                        transform: scale(0);
+                        animation: ripple 0.6s linear;
+                        width: ${size}px;
+                        height: ${size}px;
+                        top: ${y}px;
+                        left: ${x}px;
+                        pointer-events: none;
+                    `;
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+            
+            // إضافة CSS لتأثير التموج
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes ripple {
+                    to {
+                        transform: scale(4);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+
+        // دالة لنسخ البيانات إلى الحافظة
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    showNotification('تم نسخ البيانات إلى الحافظة', 'success');
+                })
+                .catch(err => {
+                    showNotification('فشل نسخ البيانات إلى الحافظة', 'error');
+                });
+        }
+
+        // دالة لتصدير PDF (إضافية إذا لزم الأمر)
+        function exportToPDF() {
+            showNotification('تصدير PDF قيد التطوير', 'info');
+        }
+
+        // التهيئة النهائية
+        setTimeout(() => {
+            if (typeof teamsData === 'undefined' || teamsData.length === 0) {
+                loadTeamsFromFirebase();
+            }
+            
+            // عرض رسالة ترحيب
+            setTimeout(() => {
+                if (!document.getElementById('adminScreen').classList.contains('hidden')) {
+                    showNotification('مرحباً بك في لوحة تحكم المشرف', 'info');
+                }
+            }, 1000);
+        }, 500);
+
     </script>
 </body>
 </html>
-
-
